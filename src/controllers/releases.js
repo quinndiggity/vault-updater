@@ -1,5 +1,5 @@
 let assert = require('assert')
-let Joi = require('joi')
+let Joi = require('@hapi/joi')
 let common = require('../common')
 let _ = require('underscore')
 let qs = require('querystring')
@@ -14,7 +14,7 @@ let platforms = _.keys(platformData)
 
 let commonValidator = {
   params: {
-    platform: Joi.valid(platforms),
+    platform: Joi.valid(...platforms),
     channel: Joi.string(),
     version: Joi.string()
   }

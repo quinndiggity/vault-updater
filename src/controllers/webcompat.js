@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const Boom = require('boom')
 const moment = require('moment')
 const uap = require('user-agent-parser')

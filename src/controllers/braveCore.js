@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-let Joi = require('joi')
+let Joi = require('@hapi/joi')
 
 let verification = require('../verification')
 let common = require('../common')
@@ -14,13 +14,13 @@ let booleanString = ['true', 'false']
 
 let validator = {
   query: {
-    platform: Joi.valid(platforms).required(),
-    channel: Joi.valid(channels).required(),
+    platform: Joi.valid(...platforms).required(),
+    channel: Joi.valid(...channels).required(),
     version: Joi.string().required(),
-    daily: Joi.valid(booleanString).required(),
-    weekly: Joi.valid(booleanString).required(),
-    monthly: Joi.valid(booleanString).required(),
-    first: Joi.valid(booleanString).required(),
+    daily: Joi.valid(...booleanString).required(),
+    weekly: Joi.valid(...booleanString).required(),
+    monthly: Joi.valid(...booleanString).required(),
+    first: Joi.valid(...booleanString).required(),
     woi: Joi.string(),
     ref: Joi.string()
   }

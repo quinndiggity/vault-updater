@@ -7,7 +7,7 @@ const SERVICES_PORT = process.env.SERVICES_PORT || 8194
 const SERVICES_PROTOCOL = process.env.SERVICES_PROTOCOL || 'http'
 
 const Boom = require('boom')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 const ProxyAgent = require('proxy-agent')
 const semver = require('semver')
 const uap = require('user-agent-parser')
