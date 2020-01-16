@@ -4,12 +4,9 @@ const r = require('request')
 exports.root = {
   method: 'GET',
   path: '/',
-  config:
-  { handler: function (request, reply) {
+  handler: function (request, reply) {
     request.log([], 'Auto updater')
-    reply('Auto updater')
-  },
-    validate: undefined
+    return reply.response('Auto updater')
   }
 }
 

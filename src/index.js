@@ -2,7 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-let Hapi = require('hapi')
+let Hapi = require('@hapi/hapi')
+let StatsD = require('hot-shots')
 
 process.env.NEW_RELIC_NO_CONFIG_FILE = true
 if (process.env.NEW_RELIC_APP_NAME && process.env.NEW_RELIC_LICENSE_KEY) {
@@ -76,28 +77,34 @@ mq.setup((senders) => {
     // Output request headers to aid in osx crash storage issue
     if (process.env.LOG_HEADERS) {
       server = new Hapi.Server({
+        host: config.host,
+        port: config.port,
         debug: {
           request: ['error', 'received', 'handler'],
           log: ['error']
         }
       })
     } else {
-      server = new Hapi.Server()
+      server = new Hapi.Server({
+        host: config.host,
+        port: config.port,
+      })
     }
-
-    let serv = server.connection({
-      host: config.host,
-      port: config.port
-    })
 
     server.register({ register: h2o2, options: { passThrough: true } }, function (err) {})
     server.register(require('blipp'), function () {})
     server.register(require('hapi-serve-s3'), function () {})
+    server.register({
+      register: require('./lib/datadog'),
+      options: {
+        statsd: new StatsD()
+      }
+    }, function () {})
 
     if (process.env.LOG_HEADERS) {
-      serv.listener.on('request', (request, event, tags) => {
-        logger.log(request.headers)
-      })
+      //serv.listener.on('request', (request, event, tags) => {
+      //  logger.log(request.headers)
+      //})
     }
 
     if (process.env.INSPECT_BRAVE_HEADERS) {
@@ -107,19 +114,19 @@ mq.setup((senders) => {
     }
 
     // Handle the boom response as well as all other requests (cache control for telemetry)
-    setGlobalHeader(server, 'Cache-Control', 'no-cache, no-store, must-revalidate, private, max-age=0')
-    setGlobalHeader(server, 'Pragma', 'no-cache')
-    setGlobalHeader(server, 'Expires', 0)
+    //setGlobalHeader(server, 'Cache-Control', 'no-cache, no-store, must-revalidate, private, max-age=0')
+    //setGlobalHeader(server, 'Pragma', 'no-cache')
+    //setGlobalHeader(server, 'Expires', 0)
 
-    serv.listener.once('clientError', function (e) {
-      console.error(e)
-    })
+    //serv.listener.once('clientError', function (e) {
+    //  console.error(e)
+    //})
 
     // Routes
     server.route(
       [
         common.root
-      ].concat(releaseRoutes, extensionRoutes, crashes, monitoring, androidRoutes, iosRoutes, braveCoreRoutes, promoProxy, installerEventsCollectionRoutes, webcompatRoutes)
+      ] //.concat(releaseRoutes, extensionRoutes, crashes, monitoring, androidRoutes, iosRoutes, braveCoreRoutes, promoProxy, installerEventsCollectionRoutes, webcompatRoutes)
     )
 
     server.start((err) => {
