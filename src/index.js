@@ -52,7 +52,6 @@ mq.setup((senders) => {
     let releaseRoutes = require('./controllers/releases').setup(runtime, releases)
     let extensionRoutes = require('./controllers/extensions').setup(runtime, extensions)
     let crashes = require('./controllers/crashes').setup(runtime)
-    let monitoring = require('./controllers/monitoring').setup(runtime)
 
     // GET /1/usage/[ios|android|brave-core]
     let androidRoutes = require('./controllers/android').setup(runtime)
@@ -145,7 +144,7 @@ mq.setup((senders) => {
           releaseRoutes,
           webcompatRoutes
         )
-        //.concat(monitoring, promoProxy, webcompatRoutes)
+        //.concat(promoProxy, webcompatRoutes)
       )
 
       await server.start((err) => {
