@@ -142,9 +142,9 @@ mq.setup((senders) => {
           extensionRoutes,
           installerEventsCollectionRoutes,
           releaseRoutes,
-          webcompatRoutes
+          webcompatRoutes,
+          promoProxy
         )
-        //.concat(promoProxy, webcompatRoutes)
       )
 
       await server.start((err) => {
