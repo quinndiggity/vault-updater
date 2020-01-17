@@ -40,9 +40,11 @@ tap.test('iOS Controller', function (t) {
       }
     }
   }
-  var replyMock = function (obj) {
-    t.ok(obj.ts, 'timestamp returned')
-    t.ok(obj.status === 'ok', 'status ok')
+  var hMock = {
+    response: function(obj) {
+      t.ok(obj.ts, 'timestamp returned')
+      t.ok(obj.status === 'ok', 'status ok')
+    }
   }
   var requestMock = {
     query: query,
@@ -53,7 +55,7 @@ tap.test('iOS Controller', function (t) {
   }
   var endpoints = ios.setup(runtimeMock)
   process.env.STORE_BRAVE_HEADERS = 1
-  endpoints[0].config.handler(requestMock, replyMock)
+  endpoints[0].handler(requestMock, hMock)
   t.plan(4)
 })
 

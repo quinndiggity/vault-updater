@@ -50,25 +50,28 @@ exports.setup = (runtime) => {
   const get = {
     method: 'GET',
     path: '/1/usage/brave-core',
-    config: {
-      handler: (request, reply) => {
-        let usage = buildUsage(request)
-        usage = headers.potentiallyStoreBraveHeaders(request, usage)
-        if (verification.isUsagePingValid(request, usage, [], [])) {
-          runtime.mongo.models.insertBraveCoreUsage(usage, (err, results) => {
-            if (err) {
-              console.log(err.toString())
-              reply({ ts: (new Date()).getTime(), status: 'error', message: err }).code(500)
-            } else {
-              reply({ ts: (new Date()).getTime(), status: 'ok' })
-            }
-          })
-        } else {
-          verification.writeFilteredUsagePing(runtime.mongo, usage, (err, results) => {
-            reply({ ts: (new Date()).getTime(), status: 'ok' })
-          })
-        }
-      },
+    handler: (request, h) => {
+      const usage = buildUsage(request)
+      usage = headers.potentiallyStoreBraveHeaders(request, usage)
+      let resp = h.response({ ts: (new Date()).getTime(), status: 'ok' })
+      if (verification.isUsagePingValid(request, usage, [], [])) {
+        runtime.mongo.models.insertBraveCoreUsage(usage, (err, results) => {
+          if (err) {
+            console.log(err.toString())
+            resp = h.response({ ts: (new Date()).getTime(), status: 'error', message: err }).code(500)
+          }
+        })
+      } else {
+        verification.writeFilteredUsagePing(runtime.mongo, usage, (err, results) => {
+          if (err) {
+            console.log(err.toString())
+          }
+        })
+      }
+      return resp
+    },
+    options: {
+      description: "* Record Brave Core usage record",
       validate: validator
     }
   }

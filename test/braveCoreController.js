@@ -42,9 +42,12 @@ tap.test('Brave Core Controller', function (t) {
       }
     }
   }
-  var replyMock = function (obj) {
-    t.ok(obj.ts, 'timestamp returned')
-    t.ok(obj.status === 'ok', 'status ok')
+
+  var hMock = {
+    response: function(obj) {
+      t.ok(obj.ts, 'timestamp returned')
+      t.ok(obj.status === 'ok', 'status ok')
+    }
   }
   var requestMock = {
     query: query,
@@ -54,7 +57,7 @@ tap.test('Brave Core Controller', function (t) {
     headers: {}
   }
   var endpoints = ctrl.setup(runtimeMock)
-  endpoints[0].config.handler(requestMock, replyMock)
+  endpoints[0].handler(requestMock, hMock)
 
   let queryAndroidBC = _.clone(query)
   let schema = Joi.object(ctrl.validator.query)

@@ -135,7 +135,17 @@ mq.setup((senders) => {
       server.route(
         [
           common.root
-        ] //.concat(releaseRoutes, extensionRoutes, crashes, monitoring, androidRoutes, iosRoutes, braveCoreRoutes, promoProxy, installerEventsCollectionRoutes, webcompatRoutes)
+        ].concat(
+          braveCoreRoutes,
+          androidRoutes,
+          iosRoutes,
+          crashes,
+          extensionRoutes,
+          installerEventsCollectionRoutes,
+          releaseRoutes,
+          webcompatRoutes
+        )
+        //.concat(monitoring, promoProxy, webcompatRoutes)
       )
 
       await server.start((err) => {

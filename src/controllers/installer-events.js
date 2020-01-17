@@ -31,17 +31,17 @@ exports.setup = (runtime) => {
   const get = {
     method: 'GET',
     path: '/1/installerEvent',
-    config: {
-      handler: async (request, reply) => {
-        var evt = exports.buildEventObject(request)
-        try {
-          await runtime.mongo.models.insertInstallerEvent(evt)
-          reply({ ts: (new Date()).getTime(), status: 'ok' })
-        } catch (e) {
-          console.log(e.toString())
-          reply({ ts: (new Date()).getTime(), status: 'error', message: e }).code(500)
-        }
-      },
+    handler: async (request, h) => {
+      var evt = exports.buildEventObject(request)
+      try {
+        await runtime.mongo.models.insertInstallerEvent(evt)
+        return h.response({ ts: (new Date()).getTime(), status: 'ok' })
+      } catch (e) {
+        console.log(e.toString())
+        return h.response({ ts: (new Date()).getTime(), status: 'error', message: e }).code(500)
+      }
+    },
+    options: {
       validate: validator
     }
   }
