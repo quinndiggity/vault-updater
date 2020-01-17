@@ -42,6 +42,7 @@ exports.setup = (runtime) => {
       }
     },
     options: {
+      description: "* Store installer event",
       validate: validator
     }
   }

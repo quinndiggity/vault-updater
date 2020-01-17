@@ -7,6 +7,9 @@ exports.root = {
   handler: function (request, reply) {
     request.log([], 'Auto updater')
     return reply.response('Auto updater')
+  },
+  options: {
+    description: "* report service name",
   }
 }
 

@@ -126,10 +126,6 @@ mq.setup((senders) => {
         return h.continue;
       });
 
-      //serv.listener.once('clientError', function (e) {
-      //  console.error(e)
-      //})
-
       // Routes
       server.route(
         [
