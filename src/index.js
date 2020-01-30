@@ -100,15 +100,20 @@ mq.setup((senders) => {
 
       await server.register({ plugin: require('@hapi/h2o2'), options: { passThrough: true } })
       await server.register({ plugin: require('blipp') })
-      // TODO(aubrey): was this being used?
+
       //await server.register({
-      //  plugin: require('hapi-s3'),
+      //  register: require('./lib/datadog'),
       //  options: {
-      //    bucket: process.env.S3_DOWNLOAD_BUCKET,
-      //    publicKey: process.env.S3_DOWNLOAD_KEY,
-      //    secretKey: process.env.S3_DOWNLOAD_SECRET,
+      //    statsd: new StatsD()
       //  }
       //})
+
+      // Output request headers to aid in osx crash storage issue
+      if (process.env.LOG_HEADERS) {
+        server.events.on('request', (request, event, tags) => {
+          logger.log(request.headers)
+        })
+      }
 
       server.ext('onPreResponse', (request, h) => {
         const response = request.response;
