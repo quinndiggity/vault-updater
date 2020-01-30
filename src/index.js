@@ -7,15 +7,7 @@ let StatsD = require('hot-shots')
 let Boom = require('@hapi/boom')
 let Joi = require('@hapi/joi')
 
-process.env.NEW_RELIC_NO_CONFIG_FILE = true
-if (process.env.NEW_RELIC_APP_NAME && process.env.NEW_RELIC_LICENSE_KEY) {
-  var newrelic = require('newrelic')
-} else {
-  console.log("Warning: New Relic not configured!")
-}
-
 let logger = require('logfmt')
-let Inert = require('inert')
 let assert = require('assert')
 let _ = require('underscore')
 
