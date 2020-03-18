@@ -8,7 +8,7 @@ exports.setup = (runtime) => {
         passThrough: true,
         timeout: 30000
       }
-    }
+    },
     options: {
       description: "* Record crash for Brave Core",
     }

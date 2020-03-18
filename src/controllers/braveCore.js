@@ -51,7 +51,7 @@ exports.setup = (runtime) => {
     method: 'GET',
     path: '/1/usage/brave-core',
     handler: (request, h) => {
-      const usage = buildUsage(request)
+      let usage = buildUsage(request)
       usage = headers.potentiallyStoreBraveHeaders(request, usage)
       let resp = h.response({ ts: (new Date()).getTime(), status: 'ok' })
       if (verification.isUsagePingValid(request, usage, [], [])) {
