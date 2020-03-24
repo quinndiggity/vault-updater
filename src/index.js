@@ -71,10 +71,6 @@ mq.setup((senders) => {
         server = new Hapi.Server({
           host: config.host,
           port: config.port,
-          debug: {
-            request: ['error', 'received', 'handler'],
-            log: ['error']
-          }
         })
       } else {
         server = new Hapi.Server({
@@ -92,13 +88,6 @@ mq.setup((senders) => {
 
       await server.register({ plugin: require('@hapi/h2o2'), options: { passThrough: true } })
       await server.register({ plugin: require('blipp') })
-
-      //await server.register({
-      //  register: require('./lib/datadog'),
-      //  options: {
-      //    statsd: new StatsD()
-      //  }
-      //})
 
       // Output request headers to aid in osx crash storage issue
       if (process.env.LOG_HEADERS) {

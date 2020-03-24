@@ -4,11 +4,11 @@
   "description": "Auto-update server for Brave laptop browser",
   "main": "index.js",
   "engines": {
-    "node": "7.10.1",
-    "npm": "4.2.0"
+    "node": "13.7.0",
+    "npm": "6.13.6"
   },
   "scripts": {
-    "start": "./node_modules/.bin/babel-node src/index.js",
+    "start": "node src/index.js",
     "lint": "standard",
     "verify": "node tools/verify.js",
     "test": "S3_DOWNLOAD_KEY=1 S3_DOWNLOAD_SECRET=1 BEHIND_FASTLY=1 tap test/*.js",
